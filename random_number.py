@@ -23,6 +23,7 @@ def main():
     args = parser.parse_args()
     result = generate_random_number(args.multiplier)
     print(f"##teamcity[buildStatisticValue key='random_number' value='{result:.2f}']")
+    print(result)
 
 
 if __name__ == "__main__":
