@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    ECR_URI: 043309339345.dkr.ecr.us-west-2.amazonaws.com/exp-runner
+    GIT_COMMIT: $CODEBUILD_RESOLVED_SOURCE_VERSION                    # CB sets this
+  # Enable local layer cache for much faster rebuilds
+  privileged: true
+  # docker layer cache uses host disk; 20–30 GB is plenty
+phases:
+  install:
+    runtime-versions:
+      docker: 24
+    commands:
+      - echo "Build for $GIT_COMMIT"
+  pre_build:
+    commands:
+      - aws ecr get-login-password | docker login -u AWS --password-stdin $ECR_URI
+  build:
+    commands:
+      # Build & push directly from GitHub—no full clone in CodeBuild container
+      - docker buildx build --push \
+          --build-arg GIT_COMMIT=$GIT_COMMIT \
+          -t $ECR_URI:$GIT_COMMIT \
+          "https://github.com/peterjm/random_number.git#$GIT_COMMIT"
+  post_build:
+    commands:
+      - echo "IMAGE=$ECR_URI:$GIT_COMMIT" > image.txt
+artifacts:
+  files: [ image.txt ]   # optional; lets your pipeline grab the image ref
+cache:
+  modes: [ LOCAL_DOCKER_LAYER_CACHE ]
