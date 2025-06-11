@@ -4,7 +4,7 @@
 
 # --- Configuration ---
 # In a real system, you might pass the S3 path and Git SHA as arguments.
-S3_PARAMS_PATH="s3://YOUR_BUCKET_NAME_HERE/parameters.json" # <-- IMPORTANT: We will replace this later
+S3_PARAMS_PATH="s3://batch-prototype-peter-2025-06-10/parameters.json"
 PARAMS_FILE="/tmp/parameters.json"
 
 echo "Dispatcher script started."

@@ -6,7 +6,7 @@ FROM python:3.11-slim
 # awscli - for interacting with AWS services like S3
 RUN apt-get update && apt-get install -y \
     jq \
-    aws-cli \
+    awscli \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
